@@ -1,0 +1,16 @@
+// This is a line comment
+/* This is a block comment */
+
+if else while for return // Keywords
+
+identifier AnotherIdentifier // Identifiers
+
+123 456 789 // Integers
+
+0123 0456 0789 // Octals
+
+0x123 0xabc 0xDEF // Hexadecimals
+
+true false // Booleans
+
++ - * / = == != < <= > >= && || ! // Operators
