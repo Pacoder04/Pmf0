@@ -1,89 +1,59 @@
 %{
-    
-    
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-    
-    
-    
+void yyerror(char *s);  
+
 %}
+%union {
 
+  int int_value;
+  char* ident;
+
+}
 
 %start S
-%token KW_IF
-%token KW_ELSE
-%token KW_WHILE
-%token KW_FOR
-%token KW_RETURN
-%token IDENTIFIER
-%token INTEGER
-%token TRUE
-%token FALSE
-%token PLUS
-%token MINUS
-%token MULTIPLY
-%token DIVIDE
+%token <int_value> INTEGER
+%token T_SC
+%token PLUS MINUS MULTIPLY DIVIDE 
+%token T_LEFTP T_RIGHTP
+%token <int_value> IDENTIFIER
 %token ASSIGN
-%token EQUAL
-%token NOT_EQUAL
-%token LESS
-%token LESS_EQUAL
-%token GREATER
-%token GREATER_EQUAL
-%token AND
-%token OR
-%token NOT
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
+%token T_TRUE
+%token T_FALSE
 
-
+%type <int_value> exp stat 
 
 %%
 
-S: statement
-    | S statement
-    ;
+S: S stat     {printf("Result: %d\n", $1);}
+  | 
+;
 
-statement: KW_IF '(' expression ')' statement
-    | KW_IF '(' expression ')' statement KW_ELSE statement
-    | KW_WHILE '(' expression ')' statement
-    | KW_FOR '(' expression ';' expression ';' expression ')' statement
-    | KW_RETURN expression ';'
-    | expression ';'
-    ;
+stat: exp T_SC               {}
+      |IDENTIFIER ASSIGN exp T_SC  {printf("%s\n", "Dodjela");}  
+;
 
-expression: IDENTIFIER ASSIGN expression
-
-    | expression PLUS expression
-    | expression MINUS expression
-    | expression MULTIPLY expression
-    | expression DIVIDE expression
-
-    | expression EQUAL expression
-    | expression NOT_EQUAL expression
-    | expression LESS expression
-    | expression LESS_EQUAL expression
-    | expression GREATER expression
-    | expression GREATER_EQUAL expression
-
-    | expression AND expression
-    | expression OR expression
-    | NOT expression
-
-    | '(' expression ')'
-    | INTEGER
-    | TRUE
-    | FALSE
-    | IDENTIFIER
-    ;               
-
-// Samo pocetak
-
-
-
-
-
-
-
-
+exp: 
+  |exp PLUS exp {$$ = $1 + $3;}
+  |exp MINUS exp {$$ = $1 - $3;}
+  |exp MULTIPLY exp {$$ = $1 * $3;}
+  |exp DIVIDE exp {$$ = $1 / $3;}
+  |T_LEFTP exp T_RIGHTP {$$=$2;}
+  |INTEGER {$$=$1;}
+  |IDENTIFIER {$$=1;}
 
 %%
+
+void yyerror(char* s){
+  printf("Error: %s\n",s);
+}
+
+int main(){
+
+  int res=yyparse();
+  return res;
+}
