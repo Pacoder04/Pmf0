@@ -1,7 +1,9 @@
+%option noyywrap
 %{
-
+#include "bisonfile.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 %}
 
 %x LINE_COMMENT
@@ -10,8 +12,8 @@
 
 %%
 [ \t\n]+                  /* ignorisi beline */
-"//"      {BEGIN (LINE_COMMENT)}        /* ignorisi komentare do kraja linije */
-"/*"      {BEGIN BLOCK_COMMENT}     /* ignorisi komentare do kraja bloka */
+"//"      {BEGIN (LINE_COMMENT); }        /* ignorisi komentare do kraja linije */
+"/*"      {BEGIN (BLOCK_COMMENT);  }     /* ignorisi komentare do kraja bloka */
 "if"      { return KW_IF; }
 "else"    { return KW_ELSE; }
 "while"   { return KW_WHILE; }
