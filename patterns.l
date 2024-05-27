@@ -1,4 +1,5 @@
 %option noyywrap
+%option yylineno
 %{
 #include "bisonfile.tab.h"
 #include <stdio.h>
@@ -49,6 +50,8 @@
 ";"  { return T_SC; }
 "("  { return T_LEFTP; }
 ")"  { return T_RIGHTP; }
+"{"  { return T_LEFTB; }
+"}"  { return T_RIGHTB; }
 
 
 <LINE_COMMENT>{  //mozda ne smije biti razmaka kod viticaste zagrade

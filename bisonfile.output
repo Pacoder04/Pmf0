@@ -1,0 +1,793 @@
+Terminals unused in grammar
+
+   KW_WHILE
+   KW_FOR
+   KW_BREAK
+   KW_CONTINUE
+   KW_RETURN
+   DOUBLE
+   OCTAL
+   HEXADECIMAL
+   STRING
+   NOT
+
+
+Grammar
+
+    0 $accept: S $end
+
+    1 S: S stat
+    2  | /* empty */
+
+    3 stat: exp T_SC
+    4     | IDENTIFIER ASSIGN exp T_SC
+    5     | if_stat
+
+    6 exp: term
+    7    | exp PLUS term
+    8    | exp MINUS term
+
+    9 term: factor
+   10     | term MULTIPLY factor
+   11     | term DIVIDE factor
+
+   12 factor: T_LEFTP exp T_RIGHTP
+   13       | INTEGER
+   14       | IDENTIFIER
+   15       | T_TRUE
+
+   16 if_stat: matched_stat
+   17        | unmatched_stat
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+   21 condition: conjunction
+   22          | condition OR conjunction
+
+   23 conjunction: comparison
+   24            | conjunction AND comparison
+
+   25 comparison: T_TRUE
+   26           | T_FALSE
+   27           | IDENTIFIER comparison_operator IDENTIFIER
+
+   28 comparison_operator: EQUAL
+   29                    | NOT_EQUAL
+   30                    | LESS
+   31                    | LESS_EQUAL
+   32                    | GREATER
+   33                    | GREATER_EQUAL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+KW_IF (258) 18 19 20
+KW_ELSE (259) 18 20
+KW_WHILE (260)
+KW_FOR (261)
+KW_BREAK (262)
+KW_CONTINUE (263)
+KW_RETURN (264)
+DOUBLE (265)
+OCTAL (266)
+HEXADECIMAL (267)
+STRING (268)
+EQUAL (269) 28
+NOT_EQUAL (270) 29
+LESS (271) 30
+LESS_EQUAL (272) 31
+GREATER (273) 32
+GREATER_EQUAL (274) 33
+AND (275) 24
+OR (276) 22
+NOT (277)
+INTEGER (278) 13
+T_SC (279) 3 4
+PLUS (280) 7
+MINUS (281) 8
+MULTIPLY (282) 10
+DIVIDE (283) 11
+T_LEFTP (284) 12 18 19 20
+T_RIGHTP (285) 12 18 19 20
+T_RIGHTB (286) 18 19 20
+T_LEFTB (287) 18 19 20
+IDENTIFIER (288) 4 14 27
+ASSIGN (289) 4
+T_TRUE (290) 15 25
+T_FALSE (291) 26
+
+
+Nonterminals, with rules where they appear
+
+$accept (37)
+    on left: 0
+S (38)
+    on left: 1 2, on right: 0 1 18 19 20
+stat (39)
+    on left: 3 4 5, on right: 1
+exp (40)
+    on left: 6 7 8, on right: 3 4 7 8 12
+term (41)
+    on left: 9 10 11, on right: 6 7 8 10 11
+factor (42)
+    on left: 12 13 14 15, on right: 9 10 11
+if_stat (43)
+    on left: 16 17, on right: 5
+matched_stat (44)
+    on left: 18, on right: 16
+unmatched_stat (45)
+    on left: 19 20, on right: 17 20
+condition (46)
+    on left: 21 22, on right: 18 19 20 22
+conjunction (47)
+    on left: 23 24, on right: 21 22 24
+comparison (48)
+    on left: 25 26 27, on right: 23 24
+comparison_operator (49)
+    on left: 28 29 30 31 32 33, on right: 27
+
+
+state 0
+
+    0 $accept: . S $end
+
+    $default  reduce using rule 2 (S)
+
+    S  go to state 1
+
+
+state 1
+
+    0 $accept: S . $end
+    1 S: S . stat
+
+    $end        shift, and go to state 2
+    KW_IF       shift, and go to state 3
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 6
+    T_TRUE      shift, and go to state 7
+
+    stat            go to state 8
+    exp             go to state 9
+    term            go to state 10
+    factor          go to state 11
+    if_stat         go to state 12
+    matched_stat    go to state 13
+    unmatched_stat  go to state 14
+
+
+state 2
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+state 3
+
+   18 matched_stat: KW_IF . T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF . T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF . T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+    T_LEFTP  shift, and go to state 15
+
+
+state 4
+
+   13 factor: INTEGER .
+
+    $default  reduce using rule 13 (factor)
+
+
+state 5
+
+   12 factor: T_LEFTP . exp T_RIGHTP
+
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 16
+    T_TRUE      shift, and go to state 7
+
+    exp     go to state 17
+    term    go to state 10
+    factor  go to state 11
+
+
+state 6
+
+    4 stat: IDENTIFIER . ASSIGN exp T_SC
+   14 factor: IDENTIFIER .
+
+    ASSIGN  shift, and go to state 18
+
+    $default  reduce using rule 14 (factor)
+
+
+state 7
+
+   15 factor: T_TRUE .
+
+    $default  reduce using rule 15 (factor)
+
+
+state 8
+
+    1 S: S stat .
+
+    $default  reduce using rule 1 (S)
+
+
+state 9
+
+    3 stat: exp . T_SC
+    7 exp: exp . PLUS term
+    8    | exp . MINUS term
+
+    T_SC   shift, and go to state 19
+    PLUS   shift, and go to state 20
+    MINUS  shift, and go to state 21
+
+
+state 10
+
+    6 exp: term .
+   10 term: term . MULTIPLY factor
+   11     | term . DIVIDE factor
+
+    MULTIPLY  shift, and go to state 22
+    DIVIDE    shift, and go to state 23
+
+    $default  reduce using rule 6 (exp)
+
+
+state 11
+
+    9 term: factor .
+
+    $default  reduce using rule 9 (term)
+
+
+state 12
+
+    5 stat: if_stat .
+
+    $default  reduce using rule 5 (stat)
+
+
+state 13
+
+   16 if_stat: matched_stat .
+
+    $default  reduce using rule 16 (if_stat)
+
+
+state 14
+
+   17 if_stat: unmatched_stat .
+
+    $default  reduce using rule 17 (if_stat)
+
+
+state 15
+
+   18 matched_stat: KW_IF T_LEFTP . condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF T_LEFTP . condition T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP . condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+    IDENTIFIER  shift, and go to state 24
+    T_TRUE      shift, and go to state 25
+    T_FALSE     shift, and go to state 26
+
+    condition    go to state 27
+    conjunction  go to state 28
+    comparison   go to state 29
+
+
+state 16
+
+   14 factor: IDENTIFIER .
+
+    $default  reduce using rule 14 (factor)
+
+
+state 17
+
+    7 exp: exp . PLUS term
+    8    | exp . MINUS term
+   12 factor: T_LEFTP exp . T_RIGHTP
+
+    PLUS      shift, and go to state 20
+    MINUS     shift, and go to state 21
+    T_RIGHTP  shift, and go to state 30
+
+
+state 18
+
+    4 stat: IDENTIFIER ASSIGN . exp T_SC
+
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 16
+    T_TRUE      shift, and go to state 7
+
+    exp     go to state 31
+    term    go to state 10
+    factor  go to state 11
+
+
+state 19
+
+    3 stat: exp T_SC .
+
+    $default  reduce using rule 3 (stat)
+
+
+state 20
+
+    7 exp: exp PLUS . term
+
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 16
+    T_TRUE      shift, and go to state 7
+
+    term    go to state 32
+    factor  go to state 11
+
+
+state 21
+
+    8 exp: exp MINUS . term
+
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 16
+    T_TRUE      shift, and go to state 7
+
+    term    go to state 33
+    factor  go to state 11
+
+
+state 22
+
+   10 term: term MULTIPLY . factor
+
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 16
+    T_TRUE      shift, and go to state 7
+
+    factor  go to state 34
+
+
+state 23
+
+   11 term: term DIVIDE . factor
+
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    IDENTIFIER  shift, and go to state 16
+    T_TRUE      shift, and go to state 7
+
+    factor  go to state 35
+
+
+state 24
+
+   27 comparison: IDENTIFIER . comparison_operator IDENTIFIER
+
+    EQUAL          shift, and go to state 36
+    NOT_EQUAL      shift, and go to state 37
+    LESS           shift, and go to state 38
+    LESS_EQUAL     shift, and go to state 39
+    GREATER        shift, and go to state 40
+    GREATER_EQUAL  shift, and go to state 41
+
+    comparison_operator  go to state 42
+
+
+state 25
+
+   25 comparison: T_TRUE .
+
+    $default  reduce using rule 25 (comparison)
+
+
+state 26
+
+   26 comparison: T_FALSE .
+
+    $default  reduce using rule 26 (comparison)
+
+
+state 27
+
+   18 matched_stat: KW_IF T_LEFTP condition . T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF T_LEFTP condition . T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP condition . T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+   22 condition: condition . OR conjunction
+
+    OR        shift, and go to state 43
+    T_RIGHTP  shift, and go to state 44
+
+
+state 28
+
+   21 condition: conjunction .
+   24 conjunction: conjunction . AND comparison
+
+    AND  shift, and go to state 45
+
+    $default  reduce using rule 21 (condition)
+
+
+state 29
+
+   23 conjunction: comparison .
+
+    $default  reduce using rule 23 (conjunction)
+
+
+state 30
+
+   12 factor: T_LEFTP exp T_RIGHTP .
+
+    $default  reduce using rule 12 (factor)
+
+
+state 31
+
+    4 stat: IDENTIFIER ASSIGN exp . T_SC
+    7 exp: exp . PLUS term
+    8    | exp . MINUS term
+
+    T_SC   shift, and go to state 46
+    PLUS   shift, and go to state 20
+    MINUS  shift, and go to state 21
+
+
+state 32
+
+    7 exp: exp PLUS term .
+   10 term: term . MULTIPLY factor
+   11     | term . DIVIDE factor
+
+    MULTIPLY  shift, and go to state 22
+    DIVIDE    shift, and go to state 23
+
+    $default  reduce using rule 7 (exp)
+
+
+state 33
+
+    8 exp: exp MINUS term .
+   10 term: term . MULTIPLY factor
+   11     | term . DIVIDE factor
+
+    MULTIPLY  shift, and go to state 22
+    DIVIDE    shift, and go to state 23
+
+    $default  reduce using rule 8 (exp)
+
+
+state 34
+
+   10 term: term MULTIPLY factor .
+
+    $default  reduce using rule 10 (term)
+
+
+state 35
+
+   11 term: term DIVIDE factor .
+
+    $default  reduce using rule 11 (term)
+
+
+state 36
+
+   28 comparison_operator: EQUAL .
+
+    $default  reduce using rule 28 (comparison_operator)
+
+
+state 37
+
+   29 comparison_operator: NOT_EQUAL .
+
+    $default  reduce using rule 29 (comparison_operator)
+
+
+state 38
+
+   30 comparison_operator: LESS .
+
+    $default  reduce using rule 30 (comparison_operator)
+
+
+state 39
+
+   31 comparison_operator: LESS_EQUAL .
+
+    $default  reduce using rule 31 (comparison_operator)
+
+
+state 40
+
+   32 comparison_operator: GREATER .
+
+    $default  reduce using rule 32 (comparison_operator)
+
+
+state 41
+
+   33 comparison_operator: GREATER_EQUAL .
+
+    $default  reduce using rule 33 (comparison_operator)
+
+
+state 42
+
+   27 comparison: IDENTIFIER comparison_operator . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 47
+
+
+state 43
+
+   22 condition: condition OR . conjunction
+
+    IDENTIFIER  shift, and go to state 24
+    T_TRUE      shift, and go to state 25
+    T_FALSE     shift, and go to state 26
+
+    conjunction  go to state 48
+    comparison   go to state 29
+
+
+state 44
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP . T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP . T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP . T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+    T_LEFTB  shift, and go to state 49
+
+
+state 45
+
+   24 conjunction: conjunction AND . comparison
+
+    IDENTIFIER  shift, and go to state 24
+    T_TRUE      shift, and go to state 25
+    T_FALSE     shift, and go to state 26
+
+    comparison  go to state 50
+
+
+state 46
+
+    4 stat: IDENTIFIER ASSIGN exp T_SC .
+
+    $default  reduce using rule 4 (stat)
+
+
+state 47
+
+   27 comparison: IDENTIFIER comparison_operator IDENTIFIER .
+
+    $default  reduce using rule 27 (comparison)
+
+
+state 48
+
+   22 condition: condition OR conjunction .
+   24 conjunction: conjunction . AND comparison
+
+    AND  shift, and go to state 45
+
+    $default  reduce using rule 22 (condition)
+
+
+state 49
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB . S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB . S T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB . S T_RIGHTB KW_ELSE unmatched_stat
+
+    $default  reduce using rule 2 (S)
+
+    S  go to state 51
+
+
+state 50
+
+   24 conjunction: conjunction AND comparison .
+
+    $default  reduce using rule 24 (conjunction)
+
+
+state 51
+
+    1 S: S . stat
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S . T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S . T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S . T_RIGHTB KW_ELSE unmatched_stat
+
+    KW_IF       shift, and go to state 3
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    T_RIGHTB    shift, and go to state 52
+    IDENTIFIER  shift, and go to state 6
+    T_TRUE      shift, and go to state 7
+
+    stat            go to state 8
+    exp             go to state 9
+    term            go to state 10
+    factor          go to state 11
+    if_stat         go to state 12
+    matched_stat    go to state 13
+    unmatched_stat  go to state 14
+
+
+state 52
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB . KW_ELSE T_LEFTB S T_RIGHTB
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB .
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB . KW_ELSE unmatched_stat
+
+    KW_ELSE  shift, and go to state 53
+
+    $default  reduce using rule 19 (unmatched_stat)
+
+
+state 53
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE . T_LEFTB S T_RIGHTB
+   20 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE . unmatched_stat
+
+    KW_IF    shift, and go to state 54
+    T_LEFTB  shift, and go to state 55
+
+    unmatched_stat  go to state 56
+
+
+state 54
+
+   19 unmatched_stat: KW_IF . T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF . T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+    T_LEFTP  shift, and go to state 57
+
+
+state 55
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB . S T_RIGHTB
+
+    $default  reduce using rule 2 (S)
+
+    S  go to state 58
+
+
+state 56
+
+   20 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat .
+
+    $default  reduce using rule 20 (unmatched_stat)
+
+
+state 57
+
+   19 unmatched_stat: KW_IF T_LEFTP . condition T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP . condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+    IDENTIFIER  shift, and go to state 24
+    T_TRUE      shift, and go to state 25
+    T_FALSE     shift, and go to state 26
+
+    condition    go to state 59
+    conjunction  go to state 28
+    comparison   go to state 29
+
+
+state 58
+
+    1 S: S . stat
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S . T_RIGHTB
+
+    KW_IF       shift, and go to state 3
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    T_RIGHTB    shift, and go to state 60
+    IDENTIFIER  shift, and go to state 6
+    T_TRUE      shift, and go to state 7
+
+    stat            go to state 8
+    exp             go to state 9
+    term            go to state 10
+    factor          go to state 11
+    if_stat         go to state 12
+    matched_stat    go to state 13
+    unmatched_stat  go to state 14
+
+
+state 59
+
+   19 unmatched_stat: KW_IF T_LEFTP condition . T_RIGHTP T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP condition . T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+   22 condition: condition . OR conjunction
+
+    OR        shift, and go to state 43
+    T_RIGHTP  shift, and go to state 61
+
+
+state 60
+
+   18 matched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE T_LEFTB S T_RIGHTB .
+
+    $default  reduce using rule 18 (matched_stat)
+
+
+state 61
+
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP . T_LEFTB S T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP . T_LEFTB S T_RIGHTB KW_ELSE unmatched_stat
+
+    T_LEFTB  shift, and go to state 62
+
+
+state 62
+
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB . S T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB . S T_RIGHTB KW_ELSE unmatched_stat
+
+    $default  reduce using rule 2 (S)
+
+    S  go to state 63
+
+
+state 63
+
+    1 S: S . stat
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S . T_RIGHTB
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S . T_RIGHTB KW_ELSE unmatched_stat
+
+    KW_IF       shift, and go to state 3
+    INTEGER     shift, and go to state 4
+    T_LEFTP     shift, and go to state 5
+    T_RIGHTB    shift, and go to state 64
+    IDENTIFIER  shift, and go to state 6
+    T_TRUE      shift, and go to state 7
+
+    stat            go to state 8
+    exp             go to state 9
+    term            go to state 10
+    factor          go to state 11
+    if_stat         go to state 12
+    matched_stat    go to state 13
+    unmatched_stat  go to state 14
+
+
+state 64
+
+   19 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB .
+   20               | KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB . KW_ELSE unmatched_stat
+
+    KW_ELSE  shift, and go to state 65
+
+    $default  reduce using rule 19 (unmatched_stat)
+
+
+state 65
+
+   20 unmatched_stat: KW_IF T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB KW_ELSE . unmatched_stat
+
+    KW_IF  shift, and go to state 54
+
+    unmatched_stat  go to state 56
