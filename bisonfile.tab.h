@@ -61,18 +61,22 @@
      NOT = 277,
      INTEGER = 278,
      T_SC = 279,
-     PLUS = 280,
-     MINUS = 281,
-     MULTIPLY = 282,
-     DIVIDE = 283,
-     T_LEFTP = 284,
-     T_RIGHTP = 285,
-     T_RIGHTB = 286,
-     T_LEFTB = 287,
-     IDENTIFIER = 288,
-     ASSIGN = 289,
-     T_TRUE = 290,
-     T_FALSE = 291
+     KW_INT = 280,
+     KW_DOUBLE = 281,
+     KW_BOOL = 282,
+     KW_STRING = 283,
+     PLUS = 284,
+     MINUS = 285,
+     MULTIPLY = 286,
+     DIVIDE = 287,
+     T_LEFTP = 288,
+     T_RIGHTP = 289,
+     T_RIGHTB = 290,
+     T_LEFTB = 291,
+     IDENTIFIER = 292,
+     ASSIGN = 293,
+     T_TRUE = 294,
+     T_FALSE = 295
    };
 #endif
 
@@ -95,7 +99,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 99 "bisonfile.tab.h"
+#line 103 "bisonfile.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

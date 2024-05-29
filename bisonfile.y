@@ -28,6 +28,7 @@ void yyerror(char *s){
 %token EQUAL NOT_EQUAL LESS LESS_EQUAL GREATER GREATER_EQUAL AND OR NOT
 %token <ival> INTEGER
 %token T_SC
+%token KW_INT KW_DOUBLE KW_BOOL KW_STRING
 %token PLUS MINUS MULTIPLY DIVIDE 
 %token T_LEFTP T_RIGHTP T_RIGHTB T_LEFTB
 %token <ival> IDENTIFIER
@@ -50,7 +51,12 @@ S: S stat     {printf("Result: %d\n");}
 stat: exp T_SC               { printf("%s\n", "Izraz"); }
       |IDENTIFIER ASSIGN exp T_SC  {printf("%s\n", "Dodjela");}  
       |if_stat {printf("%s\n", "If");}
+      |KW_WHILE T_LEFTP condition T_RIGHTP T_LEFTB S T_RIGHTB {printf("%s\n", "While");}
+      |for_stat {printf("%s\n", "For");}
+      |KW_BREAK T_SC {printf("%s\n", "Break");}
+      |declaration { printf("%s\n", "Declaration and Initialization"); }
 ;
+
 
 exp: term
   |exp PLUS term {}
@@ -66,6 +72,20 @@ factor: T_LEFTP exp T_RIGHTP {printf("%s\n", "Zagrade");}
   |INTEGER {}
   |IDENTIFIER {}
   |T_TRUE {}
+;
+
+declaration: type IDENTIFIER ASSIGN exp T_SC { printf("%s\n", "Declaration and Initialization"); }
+;
+
+type: KW_INT 
+    | KW_DOUBLE 
+    | KW_BOOL 
+    | KW_STRING 
+
+for_stat: KW_FOR T_LEFTP assignment T_SC condition T_SC assignment T_RIGHTP T_LEFTB S T_RIGHTB { printf("%s\n", "For"); }
+;
+
+assignment: IDENTIFIER ASSIGN exp
 ;
 
 if_stat: matched_stat

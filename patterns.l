@@ -22,6 +22,10 @@
 "return"  { return KW_RETURN; }
 "true"               { return T_TRUE; } // da li treba da se vrati TRUE ili 1, i da li je to dovoljno(da li je tacno)
 "false"              { return T_FALSE; }
+"int"                { return KW_INT; }
+"double"             { return KW_DOUBLE; }
+"bool"               { return KW_BOOL; }
+"string"             { return KW_STRING; }
 
 [a-zA-Z][a-zA-Z0-9_]*                      { yylval.sval = strdup(yytext); return IDENTIFIER; }
 0|[1-9][0-9]*                              { yylval.ival = atoi(yytext); return INTEGER; }
