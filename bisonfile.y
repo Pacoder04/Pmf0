@@ -27,7 +27,7 @@ void yyerror(char *s){
 %token DOUBLE OCTAL HEXADECIMAL STRING
 %token EQUAL NOT_EQUAL LESS LESS_EQUAL GREATER GREATER_EQUAL AND OR NOT
 %token <ival> INTEGER
-%token T_SC
+%token T_SC T_COMMA
 %token KW_INT KW_DOUBLE KW_BOOL KW_STRING
 %token PLUS MINUS MULTIPLY DIVIDE 
 %token T_LEFTP T_RIGHTP T_RIGHTB T_LEFTB
@@ -38,9 +38,12 @@ void yyerror(char *s){
 %left MULTIPLY DIVIDE
 %token T_TRUE
 %token T_FALSE
+%token KW_SKIP
+%token KW_READ
+%token KW_WRITE
 %nonassoc EQUAL NOT_EQUAL LESS LESS_EQUAL GREATER GREATER_EQUAL KW_ELSE
 %type <ival> exp stat term factor if_stat condition comparison conjunction comparison_operator T_TRUE T_FALSE 
-%type <ival> unmatched_stat matched_stat
+%type <ival> unmatched_stat matched_stat 
 
 %%
 
@@ -55,6 +58,12 @@ stat: exp T_SC               { printf("%s\n", "Izraz"); }
       |for_stat {printf("%s\n", "For");}
       |KW_BREAK T_SC {printf("%s\n", "Break");}
       |declaration { printf("%s\n", "Declaration and Initialization"); }
+      |function_def { printf("%s\n", "Function definition"); }
+      |function_call { printf("%s\n", "Function call"); }
+      |KW_RETURN exp T_SC { printf("%s\n", "Return"); }
+      |KW_READ IDENTIFIER T_SC { printf("%s\n", "Read"); }
+      |KW_WRITE exp T_SC { printf("%s\n", "Write"); }
+      |KW_SKIP T_SC { printf("%s\n", "Skip"); }
 ;
 
 
@@ -82,7 +91,25 @@ type: KW_INT
     | KW_BOOL 
     | KW_STRING 
 
-for_stat: KW_FOR T_LEFTP assignment T_SC condition T_SC assignment T_RIGHTP T_LEFTB S T_RIGHTB { printf("%s\n", "For"); }
+function_def: type IDENTIFIER T_LEFTP params T_RIGHTP T_LEFTB S T_RIGHTB { printf("%s\n", "Function definition"); }
+;
+
+params: param
+      | params T_COMMA param
+;
+
+param: type IDENTIFIER
+;
+
+function_call: IDENTIFIER T_LEFTP args T_RIGHTP T_SC { printf("%s\n", "Function call"); }
+;
+
+args: exp
+    | args T_COMMA exp
+;
+
+for_stat: KW_FOR T_LEFTP type IDENTIFIER ASSIGN exp T_SC condition T_SC assignment T_RIGHTP T_LEFTB S T_RIGHTB { printf("%s\n", "For with declaration"); }
+        | KW_FOR T_LEFTP assignment T_SC condition T_SC assignment T_RIGHTP T_LEFTB S T_RIGHTB { printf("%s\n", "For"); }
 ;
 
 assignment: IDENTIFIER ASSIGN exp

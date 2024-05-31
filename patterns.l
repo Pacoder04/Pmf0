@@ -26,6 +26,12 @@
 "double"             { return KW_DOUBLE; }
 "bool"               { return KW_BOOL; }
 "string"             { return KW_STRING; }
+"return"             { return KW_RETURN; }
+"write"              { return KW_WRITE; }
+"read"               { return KW_READ; }
+"break"              { return KW_BREAK; }
+"skip"               { return KW_SKIP; }
+
 
 [a-zA-Z][a-zA-Z0-9_]*                      { yylval.sval = strdup(yytext); return IDENTIFIER; }
 0|[1-9][0-9]*                              { yylval.ival = atoi(yytext); return INTEGER; }
@@ -56,6 +62,8 @@
 ")"  { return T_RIGHTP; }
 "{"  { return T_LEFTB; }
 "}"  { return T_RIGHTB; }
+","  { return T_COMMA; }
+
 
 
 <LINE_COMMENT>{  //mozda ne smije biti razmaka kod viticaste zagrade
