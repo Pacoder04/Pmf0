@@ -45,81 +45,79 @@ void yyerror(char *s) {
 
 %%
 program:
-    LET declarations IN command_sequence END { printf("Program is correct\n"); }
+    LET declarations IN command_sequence END { printf("Program start\n"); } 
 ;
 
 declarations:
-    | declaration_seq { printf("Declarations are correct\n"); }
+    | declaration_seq { printf("Declarations\n"); }
 ;
 
 declaration_seq:
-    type ident_decl { printf("Declaration_seq is correct\n"); }
-    | declaration_seq type ident_decl { printf("Declaration_seq is correct\n"); }
+    type ident_decl { printf("Type declaration\n"); }
+    | declaration_seq type ident_decl { printf("Continued type declaration\n"); }
 ;
 
 ident_decl:
-    '[' id_seq ']' ';' { printf("Ident_decl is correct\n"); }
+    '[' id_seq ']' ';' { printf("Identifier declaration\n"); }
 ;
 
 id_seq:
-   id_seq ',' IDENTIFIER  { printf("Id_seq is correct\n"); }
-    | IDENTIFIER { printf("Id_seq is correct\n"); }
+   id_seq ',' IDENTIFIER  { printf("Identifier sequence\n"); }
+    | IDENTIFIER { printf("Single identifier\n"); }
 ;
 
 command_sequence:
-    command_sequence command { printf("Command_sequence is correct\n"); }
-    | command { printf("Command_sequence is correct\n"); }
+    command_sequence command { printf("Multiple commands\n"); }
+    | command { printf("Single command\n"); }
 ;
 
 command:
-    SKIP ';' { printf("Command is correct\n"); }
-    | IDENTIFIER '=' expression ';' { printf("Command is correct\n"); }
-    | IF '(' boolean_expression ')' THEN command_sequence ELSE command_sequence FI ';' { printf("Command is correct\n"); }
-    | WHILE boolean_expression DO command_sequence ENDWHILE { printf("Command is correct\n"); }
-    | READ IDENTIFIER ';' { printf("Command is correct\n"); }
-    | WRITE expression ';' { printf("Command is correct\n"); }
+    SKIP ';' { printf("Skip command\n"); }
+    | IDENTIFIER '=' expression ';' { printf("Assignment\n"); }
+    | IF '(' boolean_expression ')' THEN command_sequence ELSE command_sequence FI ';' { printf("If command\n"); }
+    | WHILE boolean_expression DO command_sequence ENDWHILE { printf("While loop\n"); }
+    | READ IDENTIFIER ';' { printf("Read command\n"); }
+    | WRITE expression ';' { printf("Write command\n"); }
 ;
 
 expression:
-    INTCONST { printf("Expression is correct\n"); }
-    | DOUBLECONST { printf("Expression is correct\n"); }
-    | BOOLCONST { printf("Expression is correct\n"); }
-    | STRCONST { printf("Expression is correct\n"); }
-    | IDENTIFIER { printf("Expression is correct\n"); }
-    | '(' expression ')' { printf("Expression is correct\n"); }
-    | expression '+' expression { printf("Expression is correct\n"); }
-    | expression '-' expression { printf("Expression is correct\n"); }
-    | expression '*' expression { printf("Expression is correct\n"); }
-    | expression '/' expression { printf("Expression is correct\n"); }
-    | expression '%' expression { printf("Expression is correct\n"); }
-    | '-' expression %prec UMINUS { printf("Expression is correct\n"); }
-    | '!' expression %prec NOT { printf("Expression is correct\n"); }
+    INTCONST { printf("Integer constant\n"); }
+    | DOUBLECONST { printf("Double constant\n"); }
+    | BOOLCONST { printf("Boolean constant\n"); }
+    | STRCONST { printf("String constant\n"); }
+    | IDENTIFIER { printf("Identifier\n"); }
+    | '(' expression ')' { printf("Parenthesized expression\n"); }
+    | expression '+' expression { printf("Addition\n"); }
+    | expression '-' expression { printf("Subtraction\n"); }
+    | expression '*' expression { printf("Multiplication\n"); }
+    | expression '/' expression { printf("Division\n"); }
+    | expression '%' expression { printf("Modulus\n"); }
+    | '-' expression %prec UMINUS { printf("Unary minus\n"); }
+    | '!' expression %prec NOT { printf("Logical NOT\n"); }
 ;
 
 boolean_expression:    
-    expression '<' expression { printf("Boolean expression is correct\n"); }
-    | expression '>' expression { printf("Boolean expression is correct\n"); }
-    | expression LE expression { printf("Boolean expression is correct\n"); }
-    | expression GE expression { printf("Boolean expression is correct\n"); }
-    | expression EQ expression { printf("Boolean expression is correct\n"); }
-    | expression NE expression { printf("Boolean expression is correct\n"); }
-    | expression AND expression { printf("Boolean expression is correct\n"); }
-    | expression OR expression { printf("Boolean expression is correct\n"); }
+    expression '<' expression { printf("Less than comparison\n"); }
+    | expression '>' expression { printf("Greater than comparison\n"); }
+    | expression LE expression { printf("Less than or equal to comparison\n"); }
+    | expression GE expression { printf("Greater than or equal to comparison\n"); }
+    | expression EQ expression { printf("Equality comparison\n"); }
+    | expression NE expression { printf("Inequality comparison\n"); }
+    | expression AND expression { printf("Logical AND\n"); }
+    | expression OR expression { printf("Logical OR\n"); }
 ;
 
 type:
-    INT { printf("Type is correct\n"); }
-    | DOUBLE { printf("Type is correct\n"); }
-    | BOOL { printf("Type is correct\n"); }
-    | STRING { printf("Type is correct\n"); }
+    INT { printf("Integer type\n"); }
+    | DOUBLE { printf("Double type\n"); }
+    | BOOL { printf("Boolean type\n"); }
+    | STRING { printf("String type\n"); }
 ;
-
 
 %%
 
 int main() {
-    extern int yydebug;
-    yydebug = 1;
+   
     int result = yyparse();
     if (result == 0) {
         printf("Parsing successful\n");
