@@ -11,7 +11,7 @@ in
     fi;
 
     result = 0;
-    if ( b==c ) then
+    if ( a==b) then
         result = 1;
         if (result == 1) then
             write "Nested if within then works";

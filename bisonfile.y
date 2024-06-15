@@ -90,7 +90,7 @@ type: KW_INT
     | KW_DOUBLE 
     | KW_BOOL 
     | KW_STRING 
-
+;
 function_def: type IDENTIFIER T_LEFTP params T_RIGHTP T_LEFTB S T_RIGHTB { printf("%s\n", "Function definition"); }
 ;
 

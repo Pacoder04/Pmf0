@@ -1,10 +1,11 @@
 %option noyywrap
 %option yylineno
 %{
-#include "noviBizon.tab.h"
+#include "tempBizon.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 %}
 
 %x LINE_COMMENT 
