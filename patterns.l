@@ -1,10 +1,14 @@
+
 %option noyywrap
 %option yylineno
 %{
+#define _POSIX_C_SOURCE 200809L
 #include "tempBizon.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include "ast.h"
 
 %}
 
@@ -15,7 +19,7 @@
 
 [ \t\n]+                  /* Ignore whitespace */
 "//"                      { BEGIN(LINE_COMMENT); }
-"/\\*"                    { BEGIN(BLOCK_COMMENT); }
+"/*"                      {BEGIN BLOCK_COMMENT;}  
 "if"                      { return IF; }
 "else"                    { return ELSE; }
 "while"                   { return WHILE; }
@@ -34,6 +38,7 @@
 "in"                      { return IN; }
 "end"                     { return END; }
 "endwhile"                { return ENDWHILE; }
+
 
 "and"                     { return AND; }
 "or"                      { return OR; }
@@ -74,6 +79,7 @@
 "["                       { return '['; }
 "]"                       { return ']'; }
 ":"                       { return ':'; }
+"?"                       { return '?'; }
 
 <LINE_COMMENT>{
     "\n"                  { BEGIN(INITIAL); }
@@ -81,9 +87,12 @@
 }
 
 <BLOCK_COMMENT>{
-    "\\*/"                { BEGIN(INITIAL); }
-    .                     { }
-    "\n"                  { }
+  "*/" {BEGIN (INITIAL);}
+
+    .     {}
+
+    "\n"  { }
+
 }
 
 %%

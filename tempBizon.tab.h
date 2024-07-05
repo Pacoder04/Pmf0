@@ -40,14 +40,14 @@
       know about them.  */
    enum yytokentype {
      INTCONST = 258,
-     DOUBLECONST = 259,
-     BOOLCONST = 260,
-     STRCONST = 261,
-     INT = 262,
-     DOUBLE = 263,
-     BOOL = 264,
-     STRING = 265,
-     IDENTIFIER = 266,
+     IDENTIFIER = 259,
+     DOUBLECONST = 260,
+     BOOLCONST = 261,
+     STRCONST = 262,
+     INT = 263,
+     DOUBLE = 264,
+     BOOL = 265,
+     STRING = 266,
      SKIP = 267,
      READ = 268,
      WRITE = 269,
@@ -81,17 +81,19 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 16 "tempBizon.y"
+#line 21 "tempBizon.y"
 
     int int_val;
+    char* ident_val;
     double double_val;
     char *str_val;
     int bool_val;
+    struct ASTNode* node;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 95 "tempBizon.tab.h"
+#line 97 "tempBizon.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

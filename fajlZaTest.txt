@@ -1,32 +1,20 @@
 let
     int [a, b, result];
 in
-    a = 10;
-    b = 5 ;
-
-    if (a > b) then
-        write "a is greater than b";
+  
+    if (3<4) then
+     a=1 ; 
+     a=2; 
     else
-        write "a is not greater than b";
-    fi;
+     a=5;
+    fi
+    ;  
+    
 
-    result = 0;
-    if ( a==b) then
-        result = 1;
-        if (result == 1) then
-            write "Nested if within then works";
-        else
-            write "This should not print";
-        fi;
-    else
-        result = 2;
-        if (result == 2) then
-            write "This should not print";
-        else
-            write "Nested if within else works";
-        fi;
-    fi;
-
-    write "Final result is ";
-    write result;
+   /*a=1;
+   */
+   b=!true;
+   b=3+4;
+   
+    
 end

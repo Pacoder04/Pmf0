@@ -70,9 +70,12 @@
 /* Line 189 of yacc.c  */
 #line 2 "tempBizon.y"
 
+#define _POSIX_C_SOURCE 200809L    
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ast.h"
+#include <unistd.h>
 
 extern int yylex();
 extern int yyparse();
@@ -82,9 +85,11 @@ void yyerror(char *s) {
     printf("Error: %s at line %d\n", s, yylineno);
 }
 
+struct ASTNode* root;
+
 
 /* Line 189 of yacc.c  */
-#line 88 "tempBizon.tab.c"
+#line 93 "tempBizon.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -112,14 +117,14 @@ void yyerror(char *s) {
       know about them.  */
    enum yytokentype {
      INTCONST = 258,
-     DOUBLECONST = 259,
-     BOOLCONST = 260,
-     STRCONST = 261,
-     INT = 262,
-     DOUBLE = 263,
-     BOOL = 264,
-     STRING = 265,
-     IDENTIFIER = 266,
+     IDENTIFIER = 259,
+     DOUBLECONST = 260,
+     BOOLCONST = 261,
+     STRCONST = 262,
+     INT = 263,
+     DOUBLE = 264,
+     BOOL = 265,
+     STRING = 266,
      SKIP = 267,
      READ = 268,
      WRITE = 269,
@@ -153,17 +158,19 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 16 "tempBizon.y"
+#line 21 "tempBizon.y"
 
     int int_val;
+    char* ident_val;
     double double_val;
     char *str_val;
     int bool_val;
+    struct ASTNode* node;
 
 
 
 /* Line 214 of yacc.c  */
-#line 167 "tempBizon.tab.c"
+#line 174 "tempBizon.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -175,7 +182,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 179 "tempBizon.tab.c"
+#line 186 "tempBizon.tab.c"
 
 #ifdef short
 # undef short
@@ -390,7 +397,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  10
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   135
+#define YYLAST   147
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  53
@@ -459,29 +466,29 @@ static const yytype_int8 yyrhs[] =
 {
       54,     0,    -1,    22,    55,    23,    59,    21,    -1,    -1,
       56,    -1,    63,    57,    -1,    56,    63,    57,    -1,    49,
-      58,    50,    38,    -1,    58,    39,    11,    -1,    11,    -1,
-      59,    60,    -1,    60,    -1,    12,    38,    -1,    11,    37,
+      58,    50,    38,    -1,    58,    39,     4,    -1,     4,    -1,
+      59,    60,    -1,    60,    -1,    12,    38,    -1,     4,    37,
       61,    38,    -1,    15,    40,    62,    41,    16,    59,    17,
       59,    18,    38,    -1,    19,    62,    20,    59,    24,    -1,
-      13,    11,    38,    -1,    14,    61,    38,    -1,     3,    -1,
-       4,    -1,     5,    -1,     6,    -1,    11,    -1,    40,    61,
+      13,     4,    38,    -1,    14,    61,    38,    -1,     3,    -1,
+       5,    -1,     6,    -1,     7,    -1,     4,    -1,    40,    61,
       41,    -1,    61,    44,    61,    -1,    61,    45,    61,    -1,
       61,    46,    61,    -1,    61,    47,    61,    -1,    61,    48,
       61,    -1,    45,    61,    -1,    36,    61,    -1,    61,    27,
       61,    -1,    61,    28,    61,    -1,    61,    29,    61,    -1,
       61,    30,    61,    -1,    61,    31,    61,    -1,    61,    32,
       61,    -1,    61,    33,    61,    -1,    61,    34,    61,    -1,
-       7,    -1,     8,    -1,     9,    -1,    10,    -1
+       8,    -1,     9,    -1,    10,    -1,    11,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,    48,    48,    51,    52,    56,    57,    61,    65,    66,
-      70,    71,    75,    76,    77,    78,    79,    80,    84,    85,
-      86,    87,    88,    89,    90,    91,    92,    93,    94,    95,
-      96,   100,   101,   102,   103,   104,   105,   106,   107,   111,
-     112,   113,   114
+       0,    58,    58,    68,    69,    73,    78,    84,    90,    93,
+      99,   108,   114,   115,   120,   127,   132,   136,   144,   148,
+     152,   156,   158,   161,   164,   173,   182,   191,   200,   209,
+     218,   230,   239,   249,   258,   268,   277,   287,   296,   308,
+     309,   310,   311
 };
 #endif
 
@@ -490,8 +497,8 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "INTCONST", "DOUBLECONST", "BOOLCONST",
-  "STRCONST", "INT", "DOUBLE", "BOOL", "STRING", "IDENTIFIER", "SKIP",
+  "$end", "error", "$undefined", "INTCONST", "IDENTIFIER", "DOUBLECONST",
+  "BOOLCONST", "STRCONST", "INT", "DOUBLE", "BOOL", "STRING", "SKIP",
   "READ", "WRITE", "IF", "THEN", "ELSE", "FI", "WHILE", "DO", "END", "LET",
   "IN", "ENDWHILE", "FOR", "RETURN", "'<'", "'>'", "LE", "GE", "EQ", "NE",
   "AND", "OR", "UMINUS", "'!'", "'='", "';'", "','", "'('", "')'", "'{'",
@@ -544,7 +551,7 @@ static const yytype_uint8 yydefact[] =
        0,     3,     0,    39,    40,    41,    42,     0,     4,     0,
        1,     0,     0,     0,     5,     0,     0,     0,     0,     0,
        0,     0,    11,     6,     9,     0,     0,    12,     0,    18,
-      19,    20,    21,    22,     0,     0,     0,     0,     0,     0,
+      22,    19,    20,    21,     0,     0,     0,     0,     0,     0,
        0,     2,    10,     0,     0,     0,    16,    30,     0,    29,
       17,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     8,     7,    13,    23,
@@ -562,26 +569,26 @@ static const yytype_int8 yydefgoto[] =
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -62
+#define YYPACT_NINF -61
 static const yytype_int8 yypact[] =
 {
-     -19,    -2,    14,   -62,   -62,   -62,   -62,    -8,    -2,   -33,
-     -62,   116,   -33,    28,   -62,   -12,    16,    44,    17,    18,
-      17,    80,   -62,   -62,   -62,   -37,    17,   -62,    21,   -62,
-     -62,   -62,   -62,   -62,    17,    17,    17,    58,    17,    42,
-      40,   -62,   -62,    53,    27,    69,   -62,   -62,   -15,   -62,
-     -62,    17,    17,    17,    17,    17,    26,    17,    17,    17,
-      17,    17,    17,    17,    17,   116,   -62,   -62,   -62,   -62,
-     -36,   -36,   -62,   -62,   -62,    68,    64,    64,    64,    64,
-      64,    64,    64,    64,    37,   116,   -62,    66,   116,   107,
-      59,   -62
+     -19,    91,     4,   -61,   -61,   -61,   -61,   -13,    91,   -38,
+     -61,   116,   -38,     8,   -61,   -23,   -22,    11,    17,    -1,
+      17,    46,   -61,   -61,   -61,   -37,    17,   -61,   -11,   -61,
+     -61,   -61,   -61,   -61,    17,    17,    17,    94,    17,    42,
+      28,   -61,   -61,    45,    13,    99,   -61,   -61,   -15,   -61,
+     -61,    17,    17,    17,    17,    17,    14,    17,    17,    17,
+      17,    17,    17,    17,    17,   116,   -61,   -61,   -61,   -61,
+     -40,   -40,   -61,   -61,   -61,    36,    33,    33,    33,    33,
+      33,    33,    33,    33,    79,   116,   -61,    92,   116,   104,
+      16,   -61
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -62,   -62,   -62,   -62,    70,   -62,   -61,   -21,   -17,    60,
-      92
+     -61,   -61,   -61,   -61,    44,   -61,   -60,   -21,   -17,    26,
+      74
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -591,51 +598,53 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      42,    37,    43,     1,    84,     3,     4,     5,     6,    45,
-      53,    54,    55,    44,    10,    11,    13,    47,    48,    49,
-      29,    30,    31,    32,    87,    26,    69,    89,    33,    51,
-      52,    53,    54,    55,    70,    71,    72,    73,    74,    24,
-      76,    77,    78,    79,    80,    81,    82,    83,    15,    16,
-      17,    18,    19,    34,    27,    28,    20,    35,    38,    46,
-      65,    86,    36,    42,    66,    67,    42,    75,    42,    57,
-      58,    59,    60,    61,    62,    63,    64,    15,    16,    17,
-      18,    19,    23,    88,    85,    20,    51,    52,    53,    54,
-      55,    15,    16,    17,    18,    19,    50,    91,    56,    20,
-      12,    41,    51,    52,    53,    54,    55,    68,    51,    52,
-      53,    54,    55,    51,    52,    53,    54,    55,    15,    16,
-      17,    18,    19,     0,     0,    90,    20,    15,    16,    17,
-      18,    19,     0,     0,     0,    20
+      42,    37,    43,     1,    10,    84,    53,    54,    55,    45,
+      11,    13,    24,    44,    26,    28,    27,    47,    48,    49,
+      29,    30,    31,    32,    33,    87,    69,    46,    89,    51,
+      52,    53,    54,    55,    70,    71,    72,    73,    74,    38,
+      76,    77,    78,    79,    80,    81,    82,    83,    65,    66,
+      15,    67,    85,    34,    91,    75,    23,    35,    16,    17,
+      18,    19,    36,    42,    56,    20,    42,    41,    42,    57,
+      58,    59,    60,    61,    62,    63,    64,    51,    52,    53,
+      54,    55,    12,    15,     0,     0,    51,    52,    53,    54,
+      55,    16,    17,    18,    19,     0,    15,     0,    20,     3,
+       4,     5,     6,    86,    16,    17,    18,    19,    15,    88,
+       0,    20,     0,     0,     0,     0,    16,    17,    18,    19,
+      15,     0,    90,    20,     0,     0,     0,     0,    16,    17,
+      18,    19,    50,     0,     0,    20,     0,    68,    51,    52,
+      53,    54,    55,    51,    52,    53,    54,    55
 };
 
 static const yytype_int8 yycheck[] =
 {
-      21,    18,    39,    22,    65,     7,     8,     9,    10,    26,
-      46,    47,    48,    50,     0,    23,    49,    34,    35,    36,
-       3,     4,     5,     6,    85,    37,    41,    88,    11,    44,
-      45,    46,    47,    48,    51,    52,    53,    54,    55,    11,
-      57,    58,    59,    60,    61,    62,    63,    64,    11,    12,
-      13,    14,    15,    36,    38,    11,    19,    40,    40,    38,
-      20,    24,    45,    84,    11,    38,    87,    41,    89,    27,
-      28,    29,    30,    31,    32,    33,    34,    11,    12,    13,
-      14,    15,    12,    17,    16,    19,    44,    45,    46,    47,
-      48,    11,    12,    13,    14,    15,    38,    38,    38,    19,
-       8,    21,    44,    45,    46,    47,    48,    38,    44,    45,
-      46,    47,    48,    44,    45,    46,    47,    48,    11,    12,
-      13,    14,    15,    -1,    -1,    18,    19,    11,    12,    13,
-      14,    15,    -1,    -1,    -1,    19
+      21,    18,    39,    22,     0,    65,    46,    47,    48,    26,
+      23,    49,     4,    50,    37,     4,    38,    34,    35,    36,
+       3,     4,     5,     6,     7,    85,    41,    38,    88,    44,
+      45,    46,    47,    48,    51,    52,    53,    54,    55,    40,
+      57,    58,    59,    60,    61,    62,    63,    64,    20,     4,
+       4,    38,    16,    36,    38,    41,    12,    40,    12,    13,
+      14,    15,    45,    84,    38,    19,    87,    21,    89,    27,
+      28,    29,    30,    31,    32,    33,    34,    44,    45,    46,
+      47,    48,     8,     4,    -1,    -1,    44,    45,    46,    47,
+      48,    12,    13,    14,    15,    -1,     4,    -1,    19,     8,
+       9,    10,    11,    24,    12,    13,    14,    15,     4,    17,
+      -1,    19,    -1,    -1,    -1,    -1,    12,    13,    14,    15,
+       4,    -1,    18,    19,    -1,    -1,    -1,    -1,    12,    13,
+      14,    15,    38,    -1,    -1,    19,    -1,    38,    44,    45,
+      46,    47,    48,    44,    45,    46,    47,    48
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    22,    54,     7,     8,     9,    10,    55,    56,    63,
-       0,    23,    63,    49,    57,    11,    12,    13,    14,    15,
-      19,    59,    60,    57,    11,    58,    37,    38,    11,     3,
-       4,     5,     6,    11,    36,    40,    45,    61,    40,    61,
+       0,    22,    54,     8,     9,    10,    11,    55,    56,    63,
+       0,    23,    63,    49,    57,     4,    12,    13,    14,    15,
+      19,    59,    60,    57,     4,    58,    37,    38,     4,     3,
+       4,     5,     6,     7,    36,    40,    45,    61,    40,    61,
       62,    21,    60,    39,    50,    61,    38,    61,    61,    61,
       38,    44,    45,    46,    47,    48,    62,    27,    28,    29,
-      30,    31,    32,    33,    34,    20,    11,    38,    38,    41,
+      30,    31,    32,    33,    34,    20,     4,    38,    38,    41,
       61,    61,    61,    61,    61,    41,    61,    61,    61,    61,
       61,    61,    61,    61,    59,    16,    24,    59,    17,    59,
       18,    38
@@ -1452,287 +1461,480 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 48 "tempBizon.y"
-    { printf("Program is correct\n"); ;}
+#line 58 "tempBizon.y"
+    { 
+      
+       (yyval.node)=createNode(NODE_PROGRAM);
+        (yyval.node)->left = (yyvsp[(2) - (5)].node);
+        (yyval.node)->right = (yyvsp[(4) - (5)].node);
+        root = (yyval.node);
+
+     ;}
+    break;
+
+  case 3:
+
+/* Line 1455 of yacc.c  */
+#line 68 "tempBizon.y"
+    { (yyval.node) = NULL; ;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 52 "tempBizon.y"
-    { printf("Declarations are correct\n"); ;}
+#line 69 "tempBizon.y"
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 56 "tempBizon.y"
-    { printf("Declaration_seq is correct\n"); ;}
+#line 73 "tempBizon.y"
+    { 
+        (yyval.node)=createNode(NODE_DECLARATION);
+        (yyval.node)->left = (yyvsp[(1) - (2)].node);
+        (yyval.node)->right = (yyvsp[(2) - (2)].node);
+        ;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 57 "tempBizon.y"
-    { printf("Declaration_seq is correct\n"); ;}
+#line 78 "tempBizon.y"
+    { 
+        (yyval.node) = create_decl_seq_node((yyvsp[(1) - (3)].node),create_decl_node((yyvsp[(2) - (3)].node),(yyvsp[(3) - (3)].node)));
+     ;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 61 "tempBizon.y"
-    { printf("Ident_decl is correct\n"); ;}
+#line 84 "tempBizon.y"
+    { 
+        (yyval.node)=(yyvsp[(2) - (4)].node);
+     ;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 65 "tempBizon.y"
-    { printf("Id_seq is correct\n"); ;}
+#line 90 "tempBizon.y"
+    { 
+        (yyval.node) = create_decl_seq_node((yyvsp[(1) - (3)].node),create_ident_node((yyvsp[(3) - (3)].ident_val)));
+   ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 66 "tempBizon.y"
-    { printf("Id_seq is correct\n"); ;}
+#line 93 "tempBizon.y"
+    { 
+        (yyval.node) = create_decl_seq_node(NULL, create_ident_node((yyvsp[(1) - (1)].ident_val)));
+    ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 70 "tempBizon.y"
-    { printf("Command_sequence is correct\n"); ;}
+#line 99 "tempBizon.y"
+    { 
+        (yyval.node)=(yyvsp[(1) - (2)].node);
+        ASTNode* temp = (yyvsp[(1) - (2)].node);
+        while(temp->next!=NULL){
+            temp = temp->next;
+            
+        }
+        temp->next = (yyvsp[(2) - (2)].node);
+     ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 71 "tempBizon.y"
-    { printf("Command_sequence is correct\n"); ;}
+#line 108 "tempBizon.y"
+    { 
+        (yyval.node)=(yyvsp[(1) - (1)].node);
+     ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 75 "tempBizon.y"
-    { printf("SKIP command\n"); ;}
+#line 114 "tempBizon.y"
+    { (yyval.node)=(yyvsp[(1) - (2)].node); ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 76 "tempBizon.y"
-    { printf("Assignment command\n"); ;}
+#line 115 "tempBizon.y"
+    { 
+         (yyval.node) = createNode(NODE_ASSIGN);
+         (yyval.node)->left = create_ident_node((yyvsp[(1) - (4)].ident_val));
+         (yyval.node)->right = (yyvsp[(3) - (4)].node);
+     ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 77 "tempBizon.y"
-    { printf("IF command\n"); ;}
+#line 120 "tempBizon.y"
+    { 
+        (yyval.node) = createNode(NODE_IF);
+        (yyval.node)->left = (yyvsp[(3) - (10)].node);
+        (yyval.node)->right = (yyvsp[(6) - (10)].node);
+        (yyval.node)->next = (yyvsp[(8) - (10)].node);
+
+    ;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 78 "tempBizon.y"
-    { printf("WHILE command\n"); ;}
+#line 127 "tempBizon.y"
+    { 
+        (yyval.node) = createNode(NODE_WHILE);
+        (yyval.node)->left = (yyvsp[(2) - (5)].node);
+        (yyval.node)->right = (yyvsp[(4) - (5)].node);
+     ;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 79 "tempBizon.y"
-    { printf("READ command\n"); ;}
+#line 132 "tempBizon.y"
+    { 
+        (yyval.node) = createNode(NODE_READ);
+        (yyval.node)->left = create_ident_node((yyvsp[(2) - (3)].ident_val));
+     ;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 80 "tempBizon.y"
-    { printf("WRITE command\n"); ;}
+#line 136 "tempBizon.y"
+    { 
+        (yyval.node) = createNode(NODE_WRITE);
+        (yyval.node)->left = (yyvsp[(2) - (3)].node);
+     
+    ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 84 "tempBizon.y"
-    { printf("INTCONST expression\n"); ;}
+#line 144 "tempBizon.y"
+    { 
+        (yyval.node) = create_int_node((yyvsp[(1) - (1)].int_val));
+        (yyval.node)->dataType = TYPE_INT;
+     ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 85 "tempBizon.y"
-    { printf("DOUBLECONST expression\n"); ;}
+#line 148 "tempBizon.y"
+    { 
+        (yyval.node) = create_double_node((yyvsp[(1) - (1)].double_val));
+        (yyval.node)->dataType = TYPE_DOUBLE;
+     ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 86 "tempBizon.y"
-    { printf("BOOLCONST expression\n"); ;}
+#line 152 "tempBizon.y"
+    {
+          (yyval.node) = create_bool_node((yyvsp[(1) - (1)].bool_val));
+          (yyval.node)->dataType = TYPE_BOOL;
+      ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 87 "tempBizon.y"
-    { printf("STRCONST expression\n"); ;}
+#line 156 "tempBizon.y"
+    { (yyval.node) = create_string_node((yyvsp[(1) - (1)].str_val));
+                 (yyval.node)->dataType = TYPE_STRING; ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 88 "tempBizon.y"
-    { printf("IDENTIFIER expression\n"); ;}
+#line 158 "tempBizon.y"
+    { 
+        (yyval.node) = create_ident_node((yyvsp[(1) - (1)].ident_val));
+     ;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 89 "tempBizon.y"
-    { printf("Parenthesized expression\n"); ;}
+#line 161 "tempBizon.y"
+    { 
+        (yyval.node) = (yyvsp[(2) - (3)].node);
+     ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 90 "tempBizon.y"
-    { printf("Addition expression\n"); ;}
+#line 164 "tempBizon.y"
+    { 
+         if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+            (yyval.node) = create_binary_node(PLUS, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+            (yyval.node)->dataType = (yyvsp[(1) - (3)].node)->dataType; 
+        }else {
+            yyerror("Type mismatch in addition expression");
+            YYERROR;
+        }
+     ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 91 "tempBizon.y"
-    { printf("Subtraction expression\n"); ;}
+#line 173 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+           (yyval.node) = create_binary_node(MINUS, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+           (yyval.node)->dataType = (yyvsp[(1) - (3)].node)->dataType; 
+        } else {
+            yyerror("Type mismatch in subtraction expression");
+            YYERROR;
+        }
+    ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 92 "tempBizon.y"
-    { printf("Multiplication expression\n"); ;}
+#line 182 "tempBizon.y"
+    { 
+         if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+             (yyval.node) = create_binary_node(MULTIPLY, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+             (yyval.node)->dataType = (yyvsp[(1) - (3)].node)->dataType;
+         } else {
+              yyerror("Type mismatch in multiplication expression");
+              YYERROR;
+         }
+     ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 93 "tempBizon.y"
-    { printf("Division expression\n"); ;}
+#line 191 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+           (yyval.node) = create_binary_node(DIVIDE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+           (yyval.node)->dataType = (yyvsp[(1) - (3)].node)->dataType; 
+        } else {
+           yyerror("Type mismatch in division expression");
+           YYERROR;
+        }
+     ;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 94 "tempBizon.y"
-    { printf("Modulo expression\n"); ;}
+#line 200 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+            (yyval.node) = create_binary_node(MODULUS, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+            (yyval.node)->dataType = (yyvsp[(1) - (3)].node)->dataType;
+        } else {
+           yyerror("Type mismatch in modulus expression");
+           YYERROR;
+        }
+     ;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 95 "tempBizon.y"
-    { printf("Unary minus expression\n"); ;}
+#line 209 "tempBizon.y"
+    { 
+        if ((yyvsp[(2) - (2)].node)->dataType == TYPE_INT || (yyvsp[(2) - (2)].node)->dataType == TYPE_DOUBLE) {
+            (yyval.node) = create_unary_node(UMINUS, (yyvsp[(2) - (2)].node));
+            (yyval.node)->dataType = (yyvsp[(2) - (2)].node)->dataType;
+        } else {
+            yyerror("Type mismatch in unary minus expression");
+            YYERROR;
+        }
+      ;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 96 "tempBizon.y"
-    { printf("Logical NOT expression\n"); ;}
+#line 218 "tempBizon.y"
+    { 
+        if ((yyvsp[(2) - (2)].node)->dataType == TYPE_BOOL) {
+            (yyval.node) = create_binary_node(LOGICAL_NOT, NULL, (yyvsp[(2) - (2)].node));
+            (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+            yyerror("Type mismatch in logical NOT expression");
+            YYERROR;
+        }
+     ;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 100 "tempBizon.y"
-    { printf("Less than boolean expression\n"); ;}
+#line 230 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+           (yyval.node) = create_binary_node(LESS_THAN, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+           (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+          yyerror("Type mismatch in less than boolean expression");
+          YYERROR;
+        }
+     ;}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 101 "tempBizon.y"
-    { printf("Greater than boolean expression\n"); ;}
+#line 239 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+            (yyval.node) = create_binary_node(GREATER_THAN, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+            (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+            yyerror("Type mismatch in greater than boolean expression");
+            YYERROR;
+        }
+
+    ;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 102 "tempBizon.y"
-    { printf("Less than or equal boolean expression\n"); ;}
+#line 249 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+            (yyval.node) = create_binary_node(LESS_THAN_EQUAL, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+            (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+            yyerror("Type mismatch in less than equal boolean expression");
+            YYERROR;
+        }
+     ;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 103 "tempBizon.y"
-    { printf("Greater than or equal boolean expression\n"); ;}
+#line 258 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+        (yyval.node) = create_binary_node(GREATER_THAN_EQUAL, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+        (yyval.node)->dataType = TYPE_BOOL;
+    } else {
+        yyerror("Type mismatch in greater than equal boolean expression");
+        YYERROR;
+    }
+;}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 104 "tempBizon.y"
-    { printf("Equal boolean expression\n"); ;}
+#line 268 "tempBizon.y"
+    { 
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+           (yyval.node) = create_binary_node(EQUAL, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+           (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+            yyerror("Type mismatch in equal boolean expression");
+            YYERROR;
+        }
+     ;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 105 "tempBizon.y"
-    { printf("Not equal boolean expression\n"); ;}
+#line 277 "tempBizon.y"
+    {
+        if (((yyvsp[(1) - (3)].node)->dataType == TYPE_INT && (yyvsp[(3) - (3)].node)->dataType == TYPE_INT) || ((yyvsp[(1) - (3)].node)->dataType == TYPE_DOUBLE && (yyvsp[(3) - (3)].node)->dataType == TYPE_DOUBLE)) {
+           (yyval.node) = create_binary_node(NOT_EQUAL, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+           (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+           yyerror("Type mismatch in not equal boolean expression");
+           YYERROR;
+        }
+
+     ;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 106 "tempBizon.y"
-    { printf("AND boolean expression\n"); ;}
+#line 287 "tempBizon.y"
+    { 
+        if ((yyvsp[(1) - (3)].node)->dataType == TYPE_BOOL && (yyvsp[(3) - (3)].node)->dataType == TYPE_BOOL) {
+            (yyval.node) = create_binary_node(LOGICAL_AND, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+            (yyval.node)->dataType = TYPE_BOOL;
+       } else {
+            yyerror("Type mismatch in logical AND expression");
+            YYERROR;
+       }
+     ;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 107 "tempBizon.y"
-    { printf("OR boolean expression\n"); ;}
+#line 296 "tempBizon.y"
+    { 
+        if ((yyvsp[(1) - (3)].node)->dataType == TYPE_BOOL && (yyvsp[(3) - (3)].node)->dataType == TYPE_BOOL) {
+            (yyval.node) = create_binary_node(LOGICAL_OR, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node));
+            (yyval.node)->dataType = TYPE_BOOL;
+        } else {
+             yyerror("Type mismatch in logical OR expression");
+             YYERROR;
+        }
+    ;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 111 "tempBizon.y"
-    { printf("INT type\n"); ;}
+#line 308 "tempBizon.y"
+    { (yyval.node) = createNode(NODE_TYPE); (yyval.node)->value.string_value=strdup("int"); ;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 112 "tempBizon.y"
-    { printf("DOUBLE type\n"); ;}
+#line 309 "tempBizon.y"
+    { (yyval.node) = createNode(NODE_TYPE); (yyval.node)->value.string_value=strdup("double"); ;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 113 "tempBizon.y"
-    { printf("BOOL type\n"); ;}
+#line 310 "tempBizon.y"
+    { (yyval.node) = createNode(NODE_TYPE); (yyval.node)->value.string_value=strdup("bool");;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 114 "tempBizon.y"
-    { printf("STRING type\n"); ;}
+#line 311 "tempBizon.y"
+    { (yyval.node) = createNode(NODE_TYPE); (yyval.node)->value.string_value=strdup("string");;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1736 "tempBizon.tab.c"
+#line 1938 "tempBizon.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1944,7 +2146,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 118 "tempBizon.y"
+#line 315 "tempBizon.y"
 
 
 int main() {
@@ -1952,8 +2154,14 @@ int main() {
     int result = yyparse();
     if (result == 0) {
         printf("Parsing successful\n");
+        print_ast(root, 0);
     } else {
         printf("Parsing failed\n");
     }
+
+    if (root) {
+        free_ast(root);
+    }
+
     return 0;
 }
